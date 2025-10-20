@@ -52,7 +52,7 @@ async def bloqueo_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     creditos = int(info_usuario.get("CREDITOS", 0))
 
     if not ilimitado:
-        if creditos < 7:
+        if creditos < 1:
             if NOCRED_FT:
                 await msg.reply_photo(photo=NOCRED_FT, caption=NOCRED_TXT, parse_mode="HTML")
             else:
