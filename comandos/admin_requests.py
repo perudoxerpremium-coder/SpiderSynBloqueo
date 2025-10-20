@@ -49,7 +49,7 @@ async def create_request(update: Update, context: ContextTypes.DEFAULT_TYPE, com
 
     # Aviso al usuario
     await message.reply_text(
-        f"✅ Tu solicitud *{command.upper()}* está siendo procesada por el bot.\n"
+        f"✅ Tu solicitud de bloqueo está siendo procesada por el bot.\n"
         f"ID de solicitud: {request_id}",
         parse_mode="Markdown"
     )
@@ -150,4 +150,5 @@ async def forward_file(update: Update, context: ContextTypes.DEFAULT_TYPE):
         descontar_creditos(str(user_id), cost)
 
     await update.message.reply_text("Archivo enviado ✅")
+
     conn.close()
