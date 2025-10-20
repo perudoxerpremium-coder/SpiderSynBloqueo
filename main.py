@@ -38,7 +38,7 @@ async def main():
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("me", me_command))
     app.add_handler(CommandHandler("start", me_command))
-    app.add_handler(CommandHandler("movistar", movistar_command))
+    app.add_handler(CommandHandler("bloqueo", bloqueo_command))
     app.add_handler(CommandHandler("reply", reply_request))
     app.add_handler(CommandHandler("adminsend", forward_file))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, lambda u, c: u.message.reply_text("Comando no reconocido.")))
