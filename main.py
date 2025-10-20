@@ -4,7 +4,7 @@ import json
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 from comandos.utils import init_users
 from comandos.me import me_command
-from comandos.movistar import movistar_command
+from comandos.movistar import bloqueo_command
 from comandos.admin_requests import reply_request, forward_file, init_db
 from aiohttp import web
 
