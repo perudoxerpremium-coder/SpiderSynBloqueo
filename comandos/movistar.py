@@ -26,7 +26,7 @@ NOCRED_TXT = ERRS.get("NOCREDITSTXT") or "[❗] No tienes créditos suficientes.
 NOCRED_FT  = (ERRS.get("NOCREDITSFT") or "").strip() or None
 
 # =============== Comando principal ===============
-async def movistar_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def bloqueo_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     user = update.effective_user
     id_tg = str(user.id)
@@ -34,7 +34,7 @@ async def movistar_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Validación de argumentos
     if not context.args:
-        await update.message.reply_text("Por favor, proporciona el número de CELULAR después de /movistar.", reply_to_message_id=update.message.message_id)
+        await update.message.reply_text("Por favor, proporciona el número de CELULAR después de /bloqueo.", reply_to_message_id=update.message.message_id)
         return
     celular = context.args[0]
     if not celular.isdigit() or len(celular) != 9:
