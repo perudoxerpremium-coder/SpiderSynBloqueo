@@ -19,39 +19,44 @@ except Exception as e:
 if not TOKEN:
     raise SystemExit("BOT_TOKEN no encontrado en config.json")
 
-async def run_bot():
+# ---------- BOT ----------
+async def start_bot(app):
+    print("✅ Iniciando bot con polling (Render web mode)...")
+    await app.initialize()
+    await app.start()
+    await app.updater.start_polling()
+
+# ---------- Servidor web ----------
+async def web_alive(request):
+    return web.Response(text="🤖 Bot activo en Render")
+
+async def main():
     init_users()
     init_db()
+
+    # Configurar bot
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("me", me_command))
     app.add_handler(CommandHandler("start", me_command))
     app.add_handler(CommandHandler("movistar", movistar_command))
     app.add_handler(CommandHandler("reply", reply_request))
     app.add_handler(CommandHandler("adminsend", forward_file))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, lambda u, c: u.message.reply_text("Comando no reconocido.")))
 
-    async def echo(update, context):
-        await update.message.reply_text("Comando no reconocido. Usa /me o /movistar <número>.")
+    # Iniciar el bot sin cerrar el loop
+    asyncio.create_task(start_bot(app))
 
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
-    print("Bot corriendo en modo polling...")
-    await app.run_polling()
-
-async def web_alive(request):
-    return web.Response(text="Bot activo en Render ✅")
-
-async def main():
-    # iniciar polling en segundo plano
-    asyncio.create_task(run_bot())
-
-    # iniciar servidor web
-    app = web.Application()
-    app.add_routes([web.get("/", web_alive)])
+    # Iniciar servidor HTTP para Render
+    app_web = web.Application()
+    app_web.add_routes([web.get("/", web_alive)])
     port = int(os.environ.get("PORT", 10000))
-    runner = web.AppRunner(app)
+    runner = web.AppRunner(app_web)
     await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
-    print(f"Servidor web escuchando en puerto {port}")
+    print(f"🌐 Servidor web escuchando en puerto {port}")
+
+    # Mantener el proceso activo
     while True:
         await asyncio.sleep(3600)
 
